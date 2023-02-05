@@ -44,7 +44,7 @@ jobs:
           set -eux
           test refs/tags/v`hatch version` == "${{ github.ref }}"
       - name: Publish to pypi
-        run: make publish publish_repository=main
+        run: make publish publish_repository=${{ env.PYPI_REPO }}
         env:
           HATCH_INDEX_USER: __token__
           HATCH_INDEX_AUTH: ${{ secrets.PYPI_TOKEN }}
