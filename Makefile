@@ -41,9 +41,9 @@ sdist: clean
 wheel: clean
 	hatch build -t wheel
 
-publish_repository ?= test
+HATCH_INDEX_REPO ?= test
 publish: sdist wheel
-	hatch publish -r $(publish_repository)
+	hatch publish -r $(HATCH_INDEX_REPO)
 
 # Do not add to devdependencies because different platforms install
 # different packages
