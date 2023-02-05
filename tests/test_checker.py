@@ -81,7 +81,25 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 0)
         return
-
+    
+    def test_error_in_tuple_with_byte_string(self) -> None:
+        """Test checker with invalid input."""
+        # Contents of results are checked in run_flake8/
+        input_ = "a = (b'aaa' b'bbb',)"
+        checker = Checker(ast.parse(input_), _tokenize(input_))
+        result = checker.run()
+        self.assertEqual(len(list(result)), 1)
+        return
+    
+    def test_error_in_tuple_with_byte_string_multiline(self) -> None:
+        """Test checker with invalid input."""
+        # Contents of results are checked in run_flake8/
+        input_ = "a = (b'aaa' \n b'bbb',)"
+        checker = Checker(ast.parse(input_), _tokenize(input_))
+        result = checker.run()
+        self.assertEqual(len(list(result)), 1)
+        return
+    
     def test_error_in_tuple(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
@@ -90,6 +108,7 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 1)
         return
+    
     def test_error_in_tuple_no_parenthesis(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
