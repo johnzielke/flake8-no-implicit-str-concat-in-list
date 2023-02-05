@@ -1,0 +1,6 @@
+include README.md
+include Makefile
+
+graft tests
+
+global-exclude *.py[co]

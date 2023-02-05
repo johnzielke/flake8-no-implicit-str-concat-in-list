@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flake8-no-implicit-str-concat-in-list"
+dynamic = ["version"]
+description = "Flake8 plugin that forbids implicit str/bytes literal concatenations"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+authors = [
+    { name = "johnzielke", email = "code@johnzielke.de" },
+]
+keywords = [
+    "flake8",
+]
+classifiers = [
+    "Environment :: Console",
+    "Framework :: Flake8",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+#    "Programming Language :: Python :: 3.3",
+#    "Programming Language :: Python :: 3.4",
+#    "Programming Language :: Python :: 3.5",
+#    "Programming Language :: Python :: 3.6",
+#    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "flake8",
+#    "typing; python_version<\"3.5\"",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "codecov",
+    "coverage",
+    "darglint",
+    "flake8",
+    "flake8-2020",
+    "flake8-black",
+    "flake8-broken-line",
+    "flake8-builtins",
+    "flake8-docstrings",
+    "flake8-isort",
+    "flake8-rst-docstrings",
+    "hacking>=4",
+    "isort",
+    "mypy",
+    "pep8-naming",
+    "setuptools"
+]
+
+[project.entry-points."flake8.extension"]
+ICL = "flake8_no_implicit_str_concat_in_list:Checker"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/johnzielke/flake8-no-implicit-str-concat-in-list/issues"
+Changelog = "https://github.com/johnzielke/flake8-no-implicit-str-concat-in-list/blob/master/CHANGELOG.md"
+Homepage = "https://github.com/johnzielke/flake8-no-implicit-str-concat-in-list"
+
+[tool.hatch.version]
+path = "flake8_no_implicit_str_concat_in_list/_version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/flake8_no_implicit_str_concat_in_list",
+]
+[tool.hatch.build.targets.wheel]
+packages = ["flake8_no_implicit_str_concat_in_list"]

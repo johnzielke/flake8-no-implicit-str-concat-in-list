@@ -1,0 +1,3 @@
+./blanklines.py:1:11: ICL121 Implicitly concatenated str literals in list literal over multiple lines.
+./blanklines.py:6:11: ICL121 Implicitly concatenated str literals in list literal over multiple lines.
+./blanklines.py:13:15: ICL121 Implicitly concatenated str literals in list literal over multiple lines.

@@ -1,0 +1,1 @@
+./bytes.py:2:12: ICL122 Implicitly concatenated bytes literals in list literal over multiple lines.

@@ -1,0 +1,14 @@
+*.egg-info/
+__pycache__
+.venv/
+.mypy_cache/
+build/
+dist/
+.coverage
+coverage.xml
+Pipfile
+Pipfile.lock
+
+
+.vscode/*
+.idea/*

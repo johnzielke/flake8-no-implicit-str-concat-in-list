@@ -1,0 +1,3 @@
+./multiline.py:2:11: ICL121 Implicitly concatenated str literals in list literal over multiple lines.
+./multiline.py:5:11: ICL221 Implicitly concatenated str literals in tuple literal over multiple lines.
+./multiline.py:11:15: ICL121 Implicitly concatenated str literals in list literal over multiple lines.

@@ -1,0 +1,1 @@
+./fstring.py:2:15: ICL121 Implicitly concatenated str literals in list literal over multiple lines.

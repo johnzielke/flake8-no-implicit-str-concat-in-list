@@ -1,0 +1,1 @@
+./noerror.py:12:14: ICL221 Implicitly concatenated str literals in tuple literal over multiple lines.
