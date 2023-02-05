@@ -39,7 +39,7 @@ class TestChecker(unittest.TestCase):
         # Contents of results are checked in run_flake8/
         input_ = """
 a = [
- 'aaa' 
+ 'aaa'
  'bbb'
 ]
 """
@@ -49,30 +49,33 @@ a = [
         return
 
     def test_error_in_list_format_string(self) -> None:
-            """Test checker with invalid input."""
-            # Contents of results are checked in run_flake8/
-            input_ = 'a = [f"{1+1}" ""]'
-            checker = Checker(ast.parse(input_), _tokenize(input_))
-            result = checker.run()
-            self.assertEqual(len(list(result)), 1)
-            return
+        """Test checker with invalid input."""
+        # Contents of results are checked in run_flake8/
+        input_ = 'a = [f"{1+1}" ""]'
+        checker = Checker(ast.parse(input_), _tokenize(input_))
+        result = checker.run()
+        self.assertEqual(len(list(result)), 1)
+        return
+
     def test_error_in_list_format_string_single_interpolation(self) -> None:
-            """Test checker with invalid input."""
-            # Contents of results are checked in run_flake8/
-            input_ = 'a = [f"a{1+1}" f"b{2+2}"]'
-            checker = Checker(ast.parse(input_), _tokenize(input_))
-            result = checker.run()
-            self.assertEqual(len(list(result)), 1)
-            return
+        """Test checker with invalid input."""
+        # Contents of results are checked in run_flake8/
+        input_ = 'a = [f"a{1+1}" f"b{2+2}"]'
+        checker = Checker(ast.parse(input_), _tokenize(input_))
+        result = checker.run()
+        self.assertEqual(len(list(result)), 1)
+        return
+
     def test_no_error_in_list_format_string(self) -> None:
-            """Test checker with invalid input."""
-            # Contents of results are checked in run_flake8/
-            
-            input_ = 'a = [f"a{1+1}b{2+2}"]'
-            checker = Checker(ast.parse(input_), _tokenize(input_))
-            result = checker.run()
-            self.assertEqual(len(list(result)), 0)
-            return
+        """Test checker with invalid input."""
+        # Contents of results are checked in run_flake8/
+
+        input_ = 'a = [f"a{1+1}b{2+2}"]'
+        checker = Checker(ast.parse(input_), _tokenize(input_))
+        result = checker.run()
+        self.assertEqual(len(list(result)), 0)
+        return
+
     def test_no_error_in_list(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
@@ -81,7 +84,7 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 0)
         return
-    
+
     def test_error_in_tuple_with_byte_string(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
@@ -90,7 +93,7 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 1)
         return
-    
+
     def test_error_in_tuple_with_byte_string_multiline(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
@@ -99,7 +102,7 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 1)
         return
-    
+
     def test_error_in_tuple(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
@@ -108,7 +111,7 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 1)
         return
-    
+
     def test_error_in_tuple_no_parenthesis(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/
@@ -117,6 +120,7 @@ a = [
         result = checker.run()
         self.assertEqual(len(list(result)), 1)
         return
+
     def test_no_error_in_tuple(self) -> None:
         """Test checker with invalid input."""
         # Contents of results are checked in run_flake8/

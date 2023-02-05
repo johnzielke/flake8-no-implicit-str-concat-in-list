@@ -21,7 +21,7 @@ lint: mypy flake8
 
 flake8:
 	flake8 --version
-	flake8 .
+	flake8 --ignore=E501,W503 .
 
 isortify:
 	isort .
