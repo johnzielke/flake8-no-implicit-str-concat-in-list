@@ -82,7 +82,7 @@ class NoImplicitConcatInsideIterableLiteralVisitor(ast.NodeVisitor):
             elif last_token is not None or token.type not in ignore_start_tokens:
                 break
 
-    def handle_iterable_type(self, node: ast.AST):
+    def handle_iterable_type(self, node: ast.AST) -> None:
         class_name: str = node.__class__.__name__.lower()
         for child in ast.iter_child_nodes(node):
             if isinstance(child, ast.Constant):
@@ -94,18 +94,20 @@ class NoImplicitConcatInsideIterableLiteralVisitor(ast.NodeVisitor):
                 self.check_tokens_for_node(child, class_name)
         self.generic_visit(node)
 
-    def visit_List(self, node: ast.List) -> Any:
+    def visit_List(self, node: ast.List) -> None:
         self.handle_iterable_type(node)
 
-    def visit_Set(self, node: ast.Set) -> Any:
+    def visit_Set(self, node: ast.Set) -> None:
         self.handle_iterable_type(node)
 
-    def visit_Tuple(self, node: ast.Tuple) -> Any:
+    def visit_Tuple(self, node: ast.Tuple) -> None:
         self.handle_iterable_type(node)
 
-    def visit_Constant(self, node: ast.Constant) -> Any:
+    def visit_Constant(self, node: ast.Constant) -> None:
         if isinstance(node.value, tuple):
-            self.check_tokens_for_node(node, "tuple", ignore_start_tokens=tokenize.LPAR)
+            self.check_tokens_for_node(
+                node, "tuple", ignore_start_tokens=(tokenize.LPAR,)
+            )
         self.generic_visit(node)
 
 
