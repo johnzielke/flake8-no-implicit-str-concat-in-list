@@ -4,15 +4,14 @@ import ast
 import tokenize
 import typing
 
-from typing import Iterable, Any, Optional
-from typing import Tuple
+from typing import Iterable, Any, Optional, Tuple, List
 
 from ._version import __version__
 
 _ERROR = Tuple[int, int, str, None]
 
 
-def get_node_start_position_tuple(node: ast.AST):
+def get_node_start_position_tuple(node: ast.AST) -> Tuple[int, int]:
     return node.lineno, node.col_offset
 
 
@@ -24,38 +23,40 @@ _WS_TOKENS = (
     tokenize.COMMENT,
 )
 
-TYPE_NUM_MAPPINGS = {
-    list.__name__: 1,
-    tuple.__name__: 2,
-    set.__name__: 3
-}
+TYPE_NUM_MAPPINGS = {list.__name__: 1, tuple.__name__: 2, set.__name__: 3}
 
 
-def map_error(parent_type_name: str, is_on_same_line: bool, is_bytes: bool) -> typing.Tuple[str, str]:
+def map_error(
+    parent_type_name: str, is_on_same_line: bool, is_bytes: bool
+) -> typing.Tuple[str, str]:
     t_num = TYPE_NUM_MAPPINGS.get(parent_type_name, 0)
-    return (f"ICL{t_num}{1 if is_on_same_line else 2}{1 if not is_bytes else 2}",
-            f"Implicitly concatenated {'str' if not is_bytes else 'bytes'} literals" +
-            f" in {parent_type_name} literal{'' if is_on_same_line else ' over multiple lines'}.")
+    return (
+        f"ICL{t_num}{1 if is_on_same_line else 2}{1 if not is_bytes else 2}",
+        f"Implicitly concatenated {'str' if not is_bytes else 'bytes'} literals"
+        + f" in {parent_type_name} literal{'' if is_on_same_line else ' over multiple lines'}.",
+    )
 
 
 class NoImplicitConcatInsideIterableLiteralVisitor(ast.NodeVisitor):
     def __init__(self, file_tokens: Iterable[tokenize.TokenInfo]):
         self.file_tokens = file_tokens
-        self.errors = []
+        self.errors: List[_ERROR] = []
 
-    def check_tokens_for_node(self, node: ast.AST, parent_type_name: str, ignore_start_tokens=()):
-
+    def check_tokens_for_node(
+        self, node: ast.AST, parent_type_name: str, ignore_start_tokens: Iterable = ()
+    ) -> None:
         last_token: Optional[tokenize.TokenInfo] = None
         node_pos = get_node_start_position_tuple(node)
         found_start = False
         for token in self.file_tokens:
-
             if node_pos > token.start:
                 continue
             if node_pos == token.start:
                 found_start = True
             elif not found_start and node_pos < token.start:
-                raise RuntimeError(f"Missed start token, current token at {token.start}, node starting at {node_pos}")
+                raise RuntimeError(
+                    f"Missed start token, current token at {token.start}, node starting at {node_pos}"
+                )
             if token.type in _WS_TOKENS:
                 continue
             if token.type == tokenize.STRING:
@@ -64,17 +65,25 @@ class NoImplicitConcatInsideIterableLiteralVisitor(ast.NodeVisitor):
                         is_bytes = True
                     else:
                         is_bytes = False
-                    error_data = map_error(parent_type_name, is_on_same_line=node_pos[0] != last_token.end[0],
-                                           is_bytes=is_bytes)
-                    self.errors.append((last_token.end[0], last_token.end[1],
-                                        error_data[0] + " " + error_data[1],
-                                        None))
+                    error_data = map_error(
+                        parent_type_name,
+                        is_on_same_line=node_pos[0] != last_token.end[0],
+                        is_bytes=is_bytes,
+                    )
+                    self.errors.append(
+                        (
+                            last_token.end[0],
+                            last_token.end[1],
+                            error_data[0] + " " + error_data[1],
+                            None,
+                        )
+                    )
                 last_token = token
             elif last_token is not None or token.type not in ignore_start_tokens:
                 break
 
     def handle_iterable_type(self, node: ast.AST):
-        class_name = node.__class__.__name__.lower()
+        class_name: str = node.__class__.__name__.lower()
         for child in ast.iter_child_nodes(node):
             if isinstance(child, ast.Constant):
                 if isinstance(child.value, str) or isinstance(child.value, bytes):
@@ -96,7 +105,7 @@ class NoImplicitConcatInsideIterableLiteralVisitor(ast.NodeVisitor):
 
     def visit_Constant(self, node: ast.Constant) -> Any:
         if isinstance(node.value, tuple):
-            self.check_tokens_for_node(node, 'tuple', ignore_start_tokens=tokenize.LPAR)
+            self.check_tokens_for_node(node, "tuple", ignore_start_tokens=tokenize.LPAR)
         self.generic_visit(node)
 
 
@@ -118,7 +127,7 @@ class Checker:
 
     def run(self) -> Iterable[_ERROR]:
         """Run checker.
-        
+
         :yields: Errors found.
         """
         visitor = NoImplicitConcatInsideIterableLiteralVisitor(self.file_tokens)
